@@ -35,6 +35,7 @@ import { installDependenciesLinux, installDependenciesWindows, validateDependenc
 import { dockerVersion, readDockerVersionSync, transformCommandsForRoot } from './dependencies';
 import { downloadBrowserWithProgressBar, logPolitely } from './browserFetcher';
 import { packageRoot, binPath } from '../../package';
+import browsersJSON from '../../../browsers.json';
 
 import type { DependencyGroup } from './dependencies';
 import type { HostPlatform } from '@utils/hostPlatform';
@@ -1395,6 +1396,9 @@ function lowercaseAllKeys(json: any): any {
   return result;
 }
 
-export const registry = new Registry(require(path.join(packageRoot, 'browsers.json')));
+// Keep the browser revision table in the JavaScript bundle. This makes the
+// standalone SDK self-contained while preserving the same registry data for
+// the regular package build.
+export const registry = new Registry(browsersJSON);
 
 export { runOopDownloadBrowserMain } from './oopDownloadBrowserMain';

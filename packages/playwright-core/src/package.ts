@@ -16,10 +16,17 @@
 
 import path from 'path';
 
+// The standalone SDK is emitted to lib/sdk. Keep the regular package layout
+// unchanged, while allowing the bundle to find the package root from there.
+const isStandaloneSdk = path.basename(__dirname) === 'sdk';
+
 // Use a dynamic path so esbuild does not statically resolve and inline
 // package.json into coreBundle.js.
-export const packageRoot = path.join(__dirname, '..');
-export const packageJSON = require(path.join(packageRoot, 'package.json'));
+export const packageRoot = isStandaloneSdk ? path.join(__dirname, '..', '..') : path.join(__dirname, '..');
+// The SDK embeds this small piece of package metadata so that consumers only
+// need the generated JavaScript files; the normal npm package still reads its
+// package.json at runtime.
+export const packageJSON = (globalThis as any).__PLAYWRIGHT_SDK_METADATA__ || require(path.join(packageRoot, 'package.json'));
 export const binPath = path.join(packageRoot, 'bin');
 
 export function libPath(...parts: string[]): string {

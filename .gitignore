@@ -14,6 +14,11 @@ DEPS.true
 yarn.lock
 /packages/playwright-core/src/generated
 packages/*/lib/
+!packages/playwright-core/lib/
+!packages/playwright-core/lib/sdk/
+!packages/playwright-core/lib/sdk/playwright.cjs
+!packages/playwright-core/lib/sdk/playwright.mjs
+!packages/playwright-core/lib/sdk/README.md
 drivers/
 .android-sdk/
 .gradle/
